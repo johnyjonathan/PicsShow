@@ -16,10 +16,13 @@
     <a class="navbar-brand" href="{% url 'home' %}">
     <span class="ms-5">PicsShow</span>
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
+    {% if user.is_authenticated %}
+     <div class="collapse navbar-collapse d-flex justify-content-start" id="actionBar">
+        <form action="{% url 'uploadimg' %}">
+        <button type="submit" class="btn btn-outline-success"> Upload image </button>
+        </form>
+    </div>
+    {% endif %}
      <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
     <ul class="navbar-nav mx-5 ">
         {% if user.is_authenticated %}
@@ -50,6 +53,7 @@
 </nav>
 
 {% block content %}
+
 {% endblock %}
 
     <!-- Optional JavaScript; choose one of the two! -->

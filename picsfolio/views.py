@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .forms import UserCreationForm
+from .forms import UserCreationForm, uploadImgForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
+from django.utils import timezone
+from .models import UserImage
+
 
 def home(request):
     return render(request,'picsfolio/home.html')
@@ -44,4 +47,13 @@ def logoutuser(request):
     if request.method == 'POST':
         logout(request)
         return redirect ('home')
-    
+
+def uploadimg(request):
+    if request.method == 'GET':
+        return render(request,'picsfolio/uploadimg.html', {'form': uploadImgForm()})
+    else:
+        form = uploadImgForm(request.POST, request.FILES)
+        newimg = form.save(commit=False)
+        newimg.user = request.user
+        newimg.save()
+        return redirect ('home')
