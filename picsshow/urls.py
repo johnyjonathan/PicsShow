@@ -30,6 +30,6 @@ urlpatterns = [
     path('loggedin/', views.loggedin, name='loggedin'),
     path('',views.home, name='home'),
     path('uploadimg', views.uploadimg, name='uploadimg'),
-    
+    path('<int:image_id>',views.imgmetadata, name='imgmetadata')
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
