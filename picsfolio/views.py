@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .forms import UserCreationForm, uploadImgForm
 from django.contrib.auth.models import User
@@ -6,9 +6,11 @@ from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
 from django.utils import timezone
 from .models import UserImage
+from .functions import getMetadataFromJpg
 
 
 def home(request):
+    
     return render(request,'picsfolio/home.html')
 
 def loginuser(request):
@@ -39,7 +41,8 @@ def signupuser(request):
             return render(request,'picsfolio/signupuser.html',{'form':UserCreationForm(), 'error':'Passwords did not match'} )
 
 def loggedin(request):
-    return render(request,'picsfolio/loggedin.html')
+    images = UserImage.objects.filter(user=request.user)
+    return render(request,'picsfolio/loggedin.html', {'images':images})
 
 
 
@@ -57,3 +60,8 @@ def uploadimg(request):
         newimg.user = request.user
         newimg.save()
         return redirect ('home')
+
+def imgmetadata(request,image_id):
+    img= get_object_or_404(UserImage, pk=image_id)
+    exifdata = getMetadataFromJpg(img.image)
+    return render(request,'picsfolio/imgmetadata.html', {'image':img,'exifdata':exifdata})
