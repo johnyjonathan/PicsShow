@@ -19,7 +19,9 @@ class UserCreationForm(UserCreationForm):
             user.save()
         return user
 
+
 class uploadImgForm(ModelForm):
     class Meta:
         model = UserImage
         fields = ['name','image','description']
+
