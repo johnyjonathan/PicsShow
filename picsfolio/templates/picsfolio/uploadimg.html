@@ -5,11 +5,11 @@
 <div class="mb-3 col-md-3 mx-5 mt-5 ">
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    
- 
-      <label for="formFileMultiple" class="form-label"><h4>Image to upload</h4></label>
+
+
+    <label for="formFileMultiple" class="form-label"><h4>Image to upload</h4></label>
   <input class="form-control" type="file" id="formFileMultiple" name="image" multiple>
-  <label for="name" class="form-label mt-2"> Nazwa </label>
+  <label for="name" class="form-label mt-2"> Name </label>
 <input type="text" name="name" class="form-control" id="name">
   <br>
   <label for="exampleFormControlTextarea1" class="form-label" name="description">Optional description <small>(max 1000)</small></label>
