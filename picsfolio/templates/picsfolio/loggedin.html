@@ -1,26 +1,43 @@
 {% extends 'picsfolio/base.html' %} 
 
 {% block content %}
+
+{% load static %}
+<link  href="{% static 'viewerjs/viewer.css' %}" rel="stylesheet">
+
+<script src="{% static 'viewerjs/viewer.js' %}"></script>
+
     <form method="POST">
         {% csrf_token %}
 
-        <div class="bg-warning mx-5 pb-3 rounded">
+        <div class="bg-warning mx-5 pb-3 rounded opacity-3">
             <div class="row mx-5 mt-3">
                 <h2 class="pt-5 pb-3">Your photos </h2>
                 <hr>
                 <h5 class="pt-2 pb-1">Catalog </h5>
-
-                    <select class="form-control" name="Catalogs" id="catalogs">
+                <div class="col-md-5">
+                    <select class="form-control col-md-5 " name="Catalogs" id="catalogs">
                             <option value= "All"> All </option>
                             {% for catalog in catalogs %}
                                 <option value={{ catalog }} {%if catalog  == selected %}selected {% endif %}> {{ catalog }}</option>
                             {% endfor %}
                     </select>
-                    <input type="submit"  name = "Select"  value = "Select" class="btn btn-primary mt-1">
+                    <input type="submit"  name = "Select"  value = "Select" class="btn btn-primary my-2 ">
+                </div>
+                <hr> 
+                    <section id="index-gallery" class="row">
+                        
+                         {% for image, MDlist in images %}
+                           
+                            <div class="col-lg-4 col-md-10 mb-4 mb-lg-0">
+                            <img id="image" src="{{ image.image.url }}" class="w-100 shadow-lg rounded mb-4">
+                            </div>
 
+                     {% endfor %}
+                    </section> 
             </div>
         </div>
-
+<!--
             <div class="container">
                     <div class="row" >
                         <div class="col-md-4" >
@@ -38,34 +55,26 @@
                                 </div>
                             </div>
                         </div>
+-->
+                        <div class="bg-warning my-5 mx-5 py-4 px-4 rounded">
+                            
+                               
+                                            <table class="table table-hover">
 
-                        <div class="col-md-8">
-                            <div class="bg-warning sm-2 sm-2 rounded">
-                                <div class="row mx-2 mt-2">
-
-                                        {% if imageView != "list" %}
-                                            {% for image, MDlist in images %}
-
-                                                <div class="col-3 col-sm-3">
-                                                    <button type="submit" name="imagePreview"  value={{ image.id }} id="close-image"><img src="{{ image.image.url }}"></button>
-                                                </div>
-
-                                            {% endfor %}
-                                        {% else %}
-                                            <table>
-
-                                                <tr>
-                                                    <td> Name </td>
-                                                    <td> DateTimeOriginal </td>
-                                                    <td> Model </td>
-                                                    <td> ExposureTime </td>
-                                                    <td> FNumber </td>
-                                                    <td> ISOSpeedRatings </td>
-                                                    <td> LensModel </td>
+                                                <tr class="table-dark">
+                                                    <th> Name </th>
+                                                    <th> DateTimeOriginal </th>
+                                                    <th> Model </th>
+                                                    <th> ExposureTime </th>
+                                                    <th> FNumber </th>
+                                                    <th> ISOSpeedRatings </th>
+                                                    <th> LensModel </th>
+                                                    <th>    </th>
+                                                    <th> </th>
                                                 </tr>
 
                                                 {% for image, MDlist in images %}
-                                                    <tr>
+                                                    <tr class="table-dark">
                                                         <td>{{  image.name }}</td>
                                                         <td>{{ MDlist.DateTimeOriginal }}</td>
                                                         <td>{{ MDlist.Model }}</td>
@@ -73,16 +82,20 @@
                                                         <td>{{ MDlist.FNumber }}</td>
                                                         <td>{{ MDlist.ISOSpeedRatings }}</td>
                                                         <td>{{ MDlist.LensModel }}</td>
+                                                        <td> <a href="{% url 'imgmetadata' image.id %}">
+                                                            <input type="button" name="showMetaData"  value="Details" class="btn btn-outline-success"></a>
+                                                        </td>
+                                                        <td> <input type="submit" name="delete"  value="Delete" class="btn btn-outline-success"></td>
                                                     </tr>
 
                                                 {% endfor %}
                                             </table>
-                                        {% endif %}
+                                        
 
-                                </div>
+                               
                             </div>
                         </div>
-
+<!--
                     <div class="w-500"></div>
 
                         <div class="col-md-3">
@@ -123,21 +136,23 @@
                 </div>
             </div>
 
-
+-->
 {##}
 {#        <input type="radio" class="btn-check" name="radio-view" id="tiles" value="tiles" autocomplete="off" checked >#}
 {#        <label class="btn btn-outline-success" for="tiles"> Tiles </label>#}
 {##}
 {#        <input type="radio" class="btn-check" name="radio-view" id="list" value = "list" autocomplete="off" {% if imageView == "list" %}checked {% endif %}>#}
 {#        <label class="btn btn-outline-success" for="list"> List </label>#}
-
+<!--
         <input type="submit" class="btn-check" name="radio-view" id="tiles" value="tiles" autocomplete="off"  >
         <label  {% if imageView == "list" %} class="btn btn-outline-success"  {% else %} class="btn btn-success" {% endif %} for="tiles"> Tiles </label>
 
         <input type="submit" class="btn-check" name="radio-view" id="list" value = "list" autocomplete="off" >
         <label  {% if imageView == "list" %} class="btn btn-success"  {% else %} class="btn btn-outline-success" {% endif %} for="list"> List </label>
-
+-->
     </form>
-
+<script>
+const gallery = new Viewer(document.getElementById('index-gallery'));
+</script>
 {% endblock %}
 

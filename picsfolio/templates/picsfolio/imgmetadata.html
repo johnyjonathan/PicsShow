@@ -3,9 +3,10 @@
 {% block content %}
  
     <h5> Metadata of picture "{{ image.name }}": </h5>
-
+    <div class="d-flex justify-content-center mx-5 my-5">
+    <img id="image" src="{{ image.image.url }}" class="col-md-3 shadow-lg rounded mb-4 ">
     <br>
-
+    </div>
     {% if exifdata == "The file does not contain any metadata." %}
         {{exifdata}}
     {% else %}
