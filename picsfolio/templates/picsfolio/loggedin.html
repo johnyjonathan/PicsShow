@@ -1,1 +1,118 @@
-Hi there!
+{% extends 'picsfolio/base.html' %} 
+
+{% block content %}
+{% load static %}
+<link  href="{% static '/viewerjs/viewer.css' %}" rel="stylesheet">
+
+
+
+    <div class="bg-warning mx-5 pb-3 rounded">
+        <div class="row mx-5 mt-3">
+            <h2 class="pt-5 pb-3">Your photos </h2>
+           <hr>
+        </div>
+                              <div class="col-md-8">
+                            <div class="bg-warning sm-2 sm-2 rounded">
+                                <div class="row mx-2 mt-2" id="images">
+                                    {% for image in images %}
+                                        <div class="col-2 col-sm-2">
+                                           
+                                            <img src="{{ image.image.url }}" id="image" class="img-fluid mb-7 my-auto img-thumbnail" >
+                                            
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+    </div>
+
+            <div class="container">
+                    <div class="row" >
+                        <div class="col-md-4" >
+                            <div class="bg-warning sm-14 sm-14 rounded">
+                                <div class="row mx-12 mt-2">
+                                    {% for image in images %}
+                                        {% if forloop.counter == 1 %}
+                                            <div class="col-8 col-sm-8">
+                                                <a href="{% url 'imgmetadata' image.id %}">
+                                                    <img src="{{ image.image.url }}" class="img-fluid mb-1 my-auto img-thumbnail" >
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+  
+
+                    <div class="w-500"></div>
+
+                        <div class="col-md-3">
+                            <div class="bg-warning sm-4 sm-4 rounded">
+                                 <div class="col">
+                                             <form method="POST">
+                                                 <div class="container">
+                                                     <div class="row" >
+                                                         {% csrf_token %}
+                                                         <div class="col-md-4" id="actionBar">
+                                                                 <input type="submit" name="previous" value="<<"  class="btn btn-outline-success">
+                                                         </div>
+
+                                                         <div class="col-md-4" id="actionBar">
+                                                                 <input type="submit" name="next" value=">>"  class="btn btn-outline-success">
+                                                         </div>
+
+                                                         <div class="col-md-4" id="actionBar">
+                                                                 <input type="submit" name="delete"  value="Delete" class="btn btn-outline-success">
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                             </form>
+                                 </div>
+
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+<script src="{% static '/viewerjs/viewer.js' %}"></script>
+<script>
+
+const gallery = new Viewer(document.getElementById('images'));
+
+ </script>
+{#<div class="bg-warning mx-5 pb-3 rounded">#}
+{#    <div class="row mx-5 mt-3">#}
+{#        <div class = "col">#}
+{##}
+{#            <h2 class="pt-5 pb-3">Your photos </h2>#}
+{#            <hr>#}
+{#            {% for image in images %}#}
+{#                <div class="col-4 col-sm-2">#}
+{#                <a href="{% url 'imgmetadata' image.id %}">#}
+{#                <img src="{{ image.image.url }}" class="img-fluid mb-7 my-auto img-thumbnail">#}
+{#                </a>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{##}
+{#        <div class = "col">#}
+{#            <h2 class="pt-5 pb-3">Your photos </h2>#}
+{#            <hr>#}
+{#            {% for image in images %}#}
+{#                <div class="col-4 col-sm-2">#}
+{#                    <a href="{% url 'imgmetadata' image.id %}">#}
+{#                        <img src="{{ image.image.url }}" class="img-fluid mb-7 my-auto img-thumbnail">#}
+{#                    </a>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{##}
+{##}
+{#    </div>#}
+{#</div>#}
+
+
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'picsfolio/base.html' %} 
+
+{% block content %}
+ 
+    <h5> Metadata of picture "{{ image.name }}": </h5>
+
+    <br>
+
+    {% if exifdata == "The file does not contain any metadata." %}
+        {{exifdata}}
+    {% else %}
+        {% for element in exifdata %}
+            {{forloop.counter}}. {{ element }} <br>
+        {%  endfor %}
+    {% endif %}
+
+
+{% endblock %}
