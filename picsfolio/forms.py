@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db.models import fields
 from django.forms import ModelForm
-from .models import UserImage
+from .models import UserImage, UserCatalog
 
 class UserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Email')
@@ -25,3 +25,12 @@ class uploadImgForm(ModelForm):
         model = UserImage
         fields = ['name','image','description']
 
+class newCatalogForm(ModelForm):
+    class Meta:
+        model = UserCatalog
+        fields = ['CatalogName']
+
+class sort(ModelForm):
+    class Meta:
+        model = UserCatalog
+        fields = ['CatalogName']
