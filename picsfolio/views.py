@@ -1,13 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserCreationForm, uploadImgForm, newCatalogForm
-from django import forms
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.contrib.auth import login, logout, authenticate
-from django.utils import timezone
 from .models import UserImage, UserCatalog
-from .functions import getMetadataFromJpg, rotateImageId
 from django.contrib import messages
 
 tiles = True
@@ -48,51 +45,15 @@ def signupuser(request):
 def loggedin(request):
 
     catalogs = UserCatalog.objects.filter(user=request.user).values_list('CatalogName', flat=True)
-    images = UserCatalog.imageList("All", request)
+    images = UserCatalog.createImageList("All", request)
 
     if request.method == 'GET':
         return render(request, 'picsfolio/loggedin.html', {'images': images, 'catalogs': catalogs})
     else:
         catalogName = request.POST.get("Catalogs")
-        imageView = request.POST.get("radio-view")
+        images = UserCatalog.createImageList(catalogName, request)
 
-        global tiles
-
-        print(imageView)
-
-
-        if imageView == "list":
-            tiles = False
-        elif imageView == "tiles":
-            tiles = True
-        else:
-            if tiles == True:
-                imageView = "Tiles"
-            else:
-                imageView = "list"
-
-        print(imageView)
-
-
-        images = UserCatalog.imageList(catalogName, request)
-
-
-        if request.POST.get("Select"):
-            return render(request, 'picsfolio/loggedin.html', {'images': images, 'catalogs': catalogs, 'selected': catalogName, 'imageView' : imageView})
-
-        if request.POST.get("previous"):
-
-            rotateImageId(request, catalogName, 1)
-            images = UserCatalog.imageList(catalogName, request)
-            return render(request, 'picsfolio/loggedin.html', {'images': images, 'catalogs': catalogs,'selected': catalogName, 'imageView' : imageView})
-
-        elif request.POST.get("next"):
-
-            rotateImageId(request, catalogName, -1)
-            images = UserCatalog.imageList(catalogName, request)
-            return render(request, 'picsfolio/loggedin.html', {'images': images, 'catalogs': catalogs,'selected': catalogName, 'imageView' : imageView})
-
-        elif request.POST.get("delete"):
+        if request.POST.get("delete"):
 
             ids = []
             for image, MD in images:
@@ -101,20 +62,28 @@ def loggedin(request):
             if len(ids) != 0:
                 UserImage.objects.get(id=ids[0]).delete()
 
-            images = UserCatalog.imageList(catalogName, request)
-            return render(request, 'picsfolio/loggedin.html', {'images': images, 'catalogs': catalogs,'selected': catalogName, 'imageView' : imageView})
+            images = UserCatalog.createImageList(catalogName, request)
 
-        elif request.POST.get("imagePreview"):
-            ids = []
-            for image, MD in images:
-                ids.append(image.id)
-            shift = ids.index(int(request.POST.get("imagePreview")))
-            rotateImageId(request, catalogName, -shift)
-            images = UserCatalog.imageList(catalogName, request)
+        elif request.POST.get("deleteCatalog"):
 
-            return render(request, 'picsfolio/loggedin.html', {'images': images, 'catalogs': catalogs,'selected': catalogName, 'imageView' : imageView})
+            if catalogName == "All":
+                messages.info(request, "Catalog ""All"" can not be deleted")
+            else:
+                for image, MDlist in images:
+                        UserImage.objects.get(user=request.user, id=image.id).delete()
 
-    return render(request, 'picsfolio/loggedin.html', {'images': images, 'catalogs': catalogs,'selected': catalogName, 'imageView' : imageView})
+                UserCatalog.objects.get(CatalogName=catalogName).delete()
+
+                messages.info(request, "Catalog """ + catalogName + " ""have been deleted")
+                catalogName = "All"
+                images = UserCatalog.createImageList(catalogName, request)
+
+        elif request.POST.get("Metadata-sort"):
+
+            UserCatalog.sortImages(request, images, request.POST.get("Metadata-sort"))
+            images = UserCatalog.createImageList(catalogName, request)
+
+    return render(request, 'picsfolio/loggedin.html', {'images': images, 'catalogs': catalogs,'selected': catalogName})
 
 
 def logoutuser(request):
@@ -152,7 +121,7 @@ def uploadimg(request):
             newimg.catalog = UserCatalog.objects.get(CatalogName=chosenCatalogName)
             newimg.save()
 
-            messages.info(request, 'Your picture has been uploaded successfully!')
+            messages.success(request, 'Your picture has been uploaded successfully!')
 
             return render(request,'picsfolio/uploadimg.html', {'form': uploadImgForm(), "catalogs": catalogs, "chosenCatalogName" : chosenCatalogName})
 
@@ -171,6 +140,8 @@ def uploadimg(request):
 
 
 def imgmetadata(request, image_id):
+
     img = get_object_or_404(UserImage, pk=image_id)
-    exifdata = getMetadataFromJpg(img.image)
+    exifdata = UserImage.getMetadataFromJpg(img.image)
+
     return render(request, 'picsfolio/imgmetadata.html', {'image': img, 'exifdata': exifdata})

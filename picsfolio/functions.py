@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 from PIL import Image
 from PIL.ExifTags import TAGS
@@ -59,4 +60,8 @@ def rotateImageId(request, catalogName, shift):
         UserImage.objects.get(user=request.user, id= ids[i]+10000).delete()
 
     return
+=======
+
+
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 

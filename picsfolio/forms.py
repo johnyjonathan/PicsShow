@@ -23,14 +23,9 @@ class UserCreationForm(UserCreationForm):
 class uploadImgForm(ModelForm):
     class Meta:
         model = UserImage
-        fields = ['name','image','description']
+        fields = ['name', 'image', 'description']
 
 class newCatalogForm(ModelForm):
-    class Meta:
-        model = UserCatalog
-        fields = ['CatalogName']
-
-class sort(ModelForm):
     class Meta:
         model = UserCatalog
         fields = ['CatalogName']
