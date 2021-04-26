@@ -23,14 +23,21 @@ class UserCreationForm(UserCreationForm):
 class uploadImgForm(ModelForm):
     class Meta:
         model = UserImage
+<<<<<<< HEAD
         fields = ['name','image','description']
+=======
+        fields = ['name', 'image', 'description']
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
 class newCatalogForm(ModelForm):
     class Meta:
         model = UserCatalog
         fields = ['CatalogName']
+<<<<<<< HEAD
 
 class sort(ModelForm):
     class Meta:
         model = UserCatalog
         fields = ['CatalogName']
+=======
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee

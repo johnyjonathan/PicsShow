@@ -4,14 +4,27 @@ from django.contrib.auth.models import User
 from PIL import Image
 from PIL.ExifTags import TAGS
 
+<<<<<<< HEAD
 class imagesMetadataList:
     def __init__(self, DateTimeOriginal, Model, ExposureTime,FNumber, ISOSpeedRatings, LensModel):
+=======
+from fractions import Fraction
+from natsort import natsorted
+
+class imagesMetadataList:
+    def __init__(self, DateTimeOriginal, Model, ExposureTime,FNumber, ISOSpeedRatings, LensModel,View):
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
         self.DateTimeOriginal = DateTimeOriginal
         self.Model = Model
         self.ExposureTime = ExposureTime
         self.FNumber = FNumber
         self.ISOSpeedRatings = ISOSpeedRatings
         self.LensModel = LensModel
+<<<<<<< HEAD
+=======
+        self.View = View
+
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
 class UserCatalog(models.Model):
     CatalogName = models.CharField(max_length=200)
@@ -21,7 +34,11 @@ class UserCatalog(models.Model):
     def __str__(self):
         return self.name
 
+<<<<<<< HEAD
     def imageList(catalogName, request):
+=======
+    def createImageList(catalogName, request):
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
         images = []
 
@@ -54,7 +71,11 @@ class UserCatalog(models.Model):
             except:
                 Model = nodata
             try:
+<<<<<<< HEAD
                 ExposureTime = metadata["ExposureTime"]
+=======
+                ExposureTime = str(Fraction(float(metadata["ExposureTime"])).limit_denominator())
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
             except:
                 ExposureTime = nodata
             try:
@@ -70,12 +91,82 @@ class UserCatalog(models.Model):
             except:
                 LensModel = nodata
 
+<<<<<<< HEAD
             imgMetadataList=imagesMetadataList(DateTimeOriginal, Model, ExposureTime,FNumber, ISOSpeedRatings, LensModel)
 
             images.append([imageA, imgMetadataList])
 
         return images
 
+=======
+            imgMetadataList=imagesMetadataList(DateTimeOriginal, Model, ExposureTime,FNumber, ISOSpeedRatings, LensModel, True)
+
+            images.append([imageA, imgMetadataList])
+
+            if request.method != 'GET' and not request.POST.get("Select"):
+                imagesToShow = list(request.POST.getlist("showCheckbox"))
+                for image, MDlist in images:
+                    if image.name in imagesToShow:
+                        MDlist.View = True
+                    else:
+                        MDlist.View = False
+
+        return images
+
+    def sortImages(request, imagesList, SortParameter):
+
+
+        lista = []
+
+        for image, MD in imagesList:
+            if SortParameter == 'Name':
+                lista.append([image.name, image.id])
+            if SortParameter == 'DateTimeOriginal':
+                lista.append([MD.DateTimeOriginal, image.id])
+            if SortParameter == 'Model':
+                lista.append([MD.Model, image.id])
+            if SortParameter == 'ExposureTime':
+                lista.append([MD.ExposureTime, image.id])
+            if SortParameter == 'FNumber':
+                lista.append([MD.FNumber, image.id])
+            if SortParameter == 'ISOSpeedRatings':
+                lista.append([MD.ISOSpeedRatings, image.id])
+            if SortParameter == 'LensModel':
+                lista.append([MD.LensModel, image.id])
+
+        ids = []
+
+        for x, y in lista:
+            ids.append(y)
+
+        if SortParameter == 'Name':
+            lista.sort(key=lambda y: y[0].lower())
+        else:
+            lista = natsorted(lista, key=lambda y: y[0])
+
+        ids2 = []
+
+        for x, y in lista:
+            ids2.append(y)
+
+        if ids == ids2:
+            ids.reverse()
+
+        for i in range(len(ids)):
+            image = UserImage.objects.get(user=request.user, id=ids2[i])
+            image.id = ids[i] + 10000
+            image.save()
+            UserImage.objects.get(user=request.user, id=ids2[i]).delete()
+
+        for i in range(len(ids2)):
+            image = UserImage.objects.get(user=request.user, id=ids[i] + 10000)
+            image.id = ids[i]
+            image.save()
+            UserImage.objects.get(user=request.user, id=ids[i] + 10000).delete()
+
+        return
+
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
 class UserImage(models.Model):
     name = models.CharField(max_length=200)
@@ -86,6 +177,28 @@ class UserImage(models.Model):
     description = models.TextField(blank=True, max_length='1000')
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
     def __str__(self):
         return self.name
+
+    def getMetadataFromJpg(image_path):
+
+        image = Image.open(image_path)
+
+        exifdata = image.getexif()
+        metadata = []
+
+        for tag_id in exifdata:
+            tag = TAGS.get(tag_id, tag_id)
+            data = exifdata.get(tag_id)
+            metadata.append(f"{tag} : {data}")
+
+        exifdata = metadata
+
+        if len(exifdata) == 0:
+            exifdata = "The file does not contain any metadata."
+
+        return exifdata

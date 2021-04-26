@@ -11,6 +11,7 @@
     <title>PicsShow</title>
 
 
+<<<<<<< HEAD
     <style>
       button.ImageAsButton {
       display: inline-block;
@@ -26,6 +27,23 @@
       }
 
     </style>
+=======
+{#    <style>#}
+{#      button.ImageAsButton {#}
+{#      display: inline-block;#}
+{#      height: 110px;#}
+{#      padding: 10px;#}
+{#      margin: 10px;#}
+{#      vertical-align: center;#}
+{#      }#}
+{##}
+{#      #close-image img {#}
+{#      display: block;#}
+{#      height: 111px;#}
+{#      }#}
+{##}
+{#    </style>#}
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
 
   </head>
@@ -46,7 +64,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-warning">
 
     <a class="navbar-brand" href="{% url 'home' %}">
-    <span class="ms-5">PicsShow</span>
+    <span class="ms-4">PicsShow</span>
     </a>
     {% if user.is_authenticated %}
      <div class="d-flex justify-content-start" id="actionBar">

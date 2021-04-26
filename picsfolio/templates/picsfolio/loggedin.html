@@ -23,20 +23,34 @@
                             {% endfor %}
                     </select>
                     <input type="submit"  name = "Select"  value = "Select" class="btn btn-primary my-2 ">
+<<<<<<< HEAD
+=======
+                    <input type="submit"  name = "deleteCatalog"  value = "Delete" class="btn btn-primary my-2 " onclick="return confirm('Are you sure?');" >
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
                 </div>
                 <hr> 
                     <section id="index-gallery" class="row">
                         
                          {% for image, MDlist in images %}
+<<<<<<< HEAD
                            
                             <div class="col-lg-4 col-md-10 mb-4 mb-lg-0">
                             <img id="image" src="{{ image.image.url }}" class="w-100 shadow-lg rounded mb-4">
                             </div>
+=======
+
+                             {% if MDlist.View %}
+                                <div class="col-lg-4 col-md-10 mb-4 mb-lg-0">
+                                <img id="image" src="{{ image.image.url }}" class="shadow-lg rounded mb-4" height="200">
+                                </div>
+                             {% endif %}
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
                      {% endfor %}
                     </section> 
             </div>
         </div>
+<<<<<<< HEAD
 <!--
             <div class="container">
                     <div class="row" >
@@ -56,12 +70,15 @@
                             </div>
                         </div>
 -->
+=======
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
                         <div class="bg-warning my-5 mx-5 py-4 px-4 rounded">
                             
                                
                                             <table class="table table-hover">
 
                                                 <tr class="table-dark">
+<<<<<<< HEAD
                                                     <th> Name </th>
                                                     <th> DateTimeOriginal </th>
                                                     <th> Model </th>
@@ -71,10 +88,29 @@
                                                     <th> LensModel </th>
                                                     <th>    </th>
                                                     <th> </th>
+=======
+                                                    <td></td>
+                                                    {% with 'Name DateTimeOriginal Model ExposureTime FNumber ISOSpeedRatings LensModel' as list %}
+                                                        {% for name in list.split %}
+                                                            <td>
+                                                                <input type="submit" class="btn-check" name="Metadata-sort" id="{{ name }}" value="{{ name }}" autocomplete="off"  >
+                                                                <label   class="btn btn-outline-success" for="{{ name }}"> {{ name }} </label>
+                                                            </td>
+                                                        {% endfor %}
+                                                    {% endwith %}
+                                                    <td></td>
+                                                    <td></td>
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
                                                 </tr>
 
                                                 {% for image, MDlist in images %}
                                                     <tr class="table-dark">
+<<<<<<< HEAD
+=======
+
+                                                        <td><input type="checkbox" name="showCheckbox"  id="{{ image.name }}" value="{{ image.name }}"
+                                                               {% if MDlist.View %}checked> {% endif %} </td>
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
                                                         <td>{{  image.name }}</td>
                                                         <td>{{ MDlist.DateTimeOriginal }}</td>
                                                         <td>{{ MDlist.Model }}</td>
@@ -87,14 +123,31 @@
                                                         </td>
                                                         <td> <input type="submit" name="delete"  value="Delete" class="btn btn-outline-success"></td>
                                                     </tr>
+<<<<<<< HEAD
 
                                                 {% endfor %}
+=======
+                                                {% endfor %}
+                                                <tr class="table-dark" >
+                                                    <td> </td>
+                                                    <td> <input type="submit" name="show"  value="Show" class="btn btn-outline-danger"> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                    <td> </td>
+                                                </tr>
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
                                             </table>
                                         
 
                                
                             </div>
                         </div>
+<<<<<<< HEAD
 <!--
                     <div class="w-500"></div>
 
@@ -154,5 +207,13 @@
 <script>
 const gallery = new Viewer(document.getElementById('index-gallery'));
 </script>
+=======
+    </form>
+
+<script>
+const gallery = new Viewer(document.getElementById('index-gallery'));
+</script>
+
+>>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 {% endblock %}
 
