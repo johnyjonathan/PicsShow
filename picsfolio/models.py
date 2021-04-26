@@ -4,27 +4,19 @@ from django.contrib.auth.models import User
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-<<<<<<< HEAD
-class imagesMetadataList:
-    def __init__(self, DateTimeOriginal, Model, ExposureTime,FNumber, ISOSpeedRatings, LensModel):
-=======
 from fractions import Fraction
 from natsort import natsorted
 
 class imagesMetadataList:
     def __init__(self, DateTimeOriginal, Model, ExposureTime,FNumber, ISOSpeedRatings, LensModel,View):
->>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
         self.DateTimeOriginal = DateTimeOriginal
         self.Model = Model
         self.ExposureTime = ExposureTime
         self.FNumber = FNumber
         self.ISOSpeedRatings = ISOSpeedRatings
         self.LensModel = LensModel
-<<<<<<< HEAD
-=======
         self.View = View
 
->>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
 class UserCatalog(models.Model):
     CatalogName = models.CharField(max_length=200)
@@ -34,11 +26,7 @@ class UserCatalog(models.Model):
     def __str__(self):
         return self.name
 
-<<<<<<< HEAD
-    def imageList(catalogName, request):
-=======
     def createImageList(catalogName, request):
->>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
         images = []
 
@@ -71,11 +59,7 @@ class UserCatalog(models.Model):
             except:
                 Model = nodata
             try:
-<<<<<<< HEAD
-                ExposureTime = metadata["ExposureTime"]
-=======
                 ExposureTime = str(Fraction(float(metadata["ExposureTime"])).limit_denominator())
->>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
             except:
                 ExposureTime = nodata
             try:
@@ -91,14 +75,6 @@ class UserCatalog(models.Model):
             except:
                 LensModel = nodata
 
-<<<<<<< HEAD
-            imgMetadataList=imagesMetadataList(DateTimeOriginal, Model, ExposureTime,FNumber, ISOSpeedRatings, LensModel)
-
-            images.append([imageA, imgMetadataList])
-
-        return images
-
-=======
             imgMetadataList=imagesMetadataList(DateTimeOriginal, Model, ExposureTime,FNumber, ISOSpeedRatings, LensModel, True)
 
             images.append([imageA, imgMetadataList])
@@ -166,7 +142,6 @@ class UserCatalog(models.Model):
 
         return
 
->>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
 
 class UserImage(models.Model):
     name = models.CharField(max_length=200)
@@ -177,10 +152,6 @@ class UserImage(models.Model):
     description = models.TextField(blank=True, max_length='1000')
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 9f562577c471413145e1bba153a103dae70a4bee
     def __str__(self):
         return self.name
 
